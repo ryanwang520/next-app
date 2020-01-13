@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/Link'
 import React from 'react'
 
 const linkStyle = {
@@ -7,12 +7,10 @@ const linkStyle = {
 
 const Header = () => (
   <div>
-    <Link href="/">
-      <a style={linkStyle}>Home</a>
+    <Link mr={2} href="/">
+      Home
     </Link>
-    <Link href="/about">
-      <a style={linkStyle}>About</a>
-    </Link>
+    <Link href="/about">About</Link>
   </div>
 )
 

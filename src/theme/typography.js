@@ -45,5 +45,6 @@ const typography = {
     '6xl': '4rem',
   },
 }
+typography.fontSizes.body = typography.fontSizes.md
 
 export default typography
