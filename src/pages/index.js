@@ -1,6 +1,9 @@
 import React from 'react'
 import Header from '@/components/Header'
 import { useForm } from 'react-hook-form'
+import fetch from 'isomorphic-unfetch'
+import { css } from '@emotion/core'
+import { App } from '@/components/MyModal'
 
 import { useRouter } from 'next/router'
 import {
@@ -43,6 +46,14 @@ import {
 } from '@chakra-ui/core'
 
 import { Button, CSSReset } from '@chakra-ui/core'
+import useSWR, { trigger } from 'swr'
+
+// const Page = styldd.div`
+
+//         max-width: 800px;
+//         margin: 0 auto;
+//         width: 90vw;
+//  `
 function ToastExample() {
   const toast = useToast()
   return (
@@ -62,7 +73,19 @@ function ToastExample() {
   )
 }
 
-export default function Index() {
+export default function Index(props) {
+  const initialData = props.data
+  console.log({ initialData })
+  const { data } = useSWR(
+    '/api',
+    async path => {
+      const res = await fetch(path)
+      return await res.json()
+    },
+    { initialData },
+  )
+  console.log({ data })
+
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { register, handleSubmit, errors } = useForm()
@@ -73,12 +96,21 @@ export default function Index() {
 
   const handleToggle = () => setShow(!show)
   return (
-    <div>
+    <div
+      css={css`
+        max-width: 800px;
+        margin: 0 auto;
+        width: 90vw;
+      `}
+    >
+      <App />
       <Header />
       {router.query.title}
       <CSSReset />
-      <Button onClick={onOpen}>Open Modal</Button>
-
+      <Button variantColor="red">Button</Button>
+      <Box color="primary.100">{data?.name}</Box>
+      {/* <Box color="tomato">{data?.name}</Box>
+      <Button onClick={onOpen}>Open Modal</Button> */}
       {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -94,36 +126,53 @@ export default function Index() {
           </ModalFooter>
         </ModalContent>
       </Modal> */}
-      <Button variantColor="blue" onClick={handleToggle}>
+      {/* <Button variantColor="blue" onClick={handleToggle}>
         Toggle
       </Button>
       <Collapse mt={4} isOpen={show}>
         Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
         terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
         labore wes anderson cred nesciunt sapiente ea proident.
-      </Collapse>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isRequired isInvalid={errors.email}>
-          <FormLabel htmlFor="email">Email address</FormLabel>
-          <Input
-            ref={register({ required: true })}
-            name="email"
-            id="email"
-            aria-describedby="email-helper-text"
-          />
-          <FormErrorMessage>email is required</FormErrorMessage>
-        </FormControl>
-        <Select ref={register} name="option" placeholder="Select option">
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
-        </Select>
-        <List spacing={2}>
+      </Collapse> */}
+      {/* <List spacing={2}>
           <ListItem>Lorem ipsum dolor sit amet</ListItem>
           <ListItem>Consectetur adipiscing elit</ListItem>
           <ListItem>Integer molestie lorem at massa</ListItem>
           <ListItem>Facilisis in pretium nisl aliquet</ListItem>
-        </List>
+        </List> */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={4}>
+          <FormControl isRequired isInvalid={errors.email}>
+            <FormLabel htmlFor="email">Email address</FormLabel>
+            <Input
+              ref={register({ required: true })}
+              name="email"
+              id="email"
+              aria-describedby="email-helper-text"
+            />
+            <FormErrorMessage>email is required</FormErrorMessage>
+          </FormControl>
+          <Select ref={register} name="option" placeholder="Select option">
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </Select>
+          <FormControl isRequired isInvalid={errors.username}>
+            <Input name="username" ref={register} />
+          </FormControl>
+          <Input name="password" type="password" ref={register} />
+          <Button variantColor="blue" type="submit">
+            submit
+          </Button>
+          {/* <div
+            onClick={() => alert('hello')}
+            css={css`
+              cursor: pointer;
+            `}
+          >
+            submit
+          </div> */}
+        </Stack>
         {/* <RadioGroup>
           <Radio ref={register} j name="number" value="1">
             First
@@ -146,14 +195,14 @@ export default function Index() {
           <Input placeholder="default size" size="md" />
           <Input placeholder="small size" size="sm" />
         </Stack> */}
-        <Flex justify="center" align="center">
+        {/* <Flex justify="center" align="center">
           <FormLabel htmlFor="email-alerts">Enable email alerts?</FormLabel>
           <Switch name="switch" ref={register} id="email-alerts" />
-        </Flex>
+        </Flex> */}
       </form>
-      <Tooltip label="Welcome home" placement="bottom">
+      {/* <Tooltip label="Welcome home" placement="bottom">
         <Icon name="phone" />
-      </Tooltip>
+      </Tooltip> */}
       {/* <Stack spacing={3}>
         <Text fontSize="6xl">In love with React & Next</Text>
         <Text fontSize="5xl">In love with React & Next</Text>
@@ -166,11 +215,11 @@ export default function Index() {
         <Text fontSize="sm">In love with React & Next</Text>
         <Text fontSize="xs">In love with React & Next</Text>
       </Stack> */}
-      <Stack isInline spacing={4}>
+      {/* <Stack isInline spacing={4}>
         <Box>hello</Box>
         <Box>world</Box>
       </Stack>
-      <Spinner color="red.500" />
+      <Spinner color="red.500" /> */}
       {/* <ToastExample />
       <Button isLoading variantColor="green">
         click me
@@ -193,4 +242,9 @@ export default function Index() {
       </Box> */}
     </div>
   )
+}
+Index.getInitialProps = async ctx => {
+  const res = await fetch('http://localhost:3001/api')
+  const data = await res.json()
+  return { data }
 }

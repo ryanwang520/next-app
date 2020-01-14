@@ -16,9 +16,11 @@ export const baseSizes = {
   '32': '8rem',
   '40': '10rem',
   '48': '12rem',
+  '50': '12.75rem',
   '56': '14rem',
   '64': '16rem',
 }
+baseSizes.sm = baseSizes[5]
 
 const largeSizes = {
   full: '100%',
@@ -29,6 +31,7 @@ const largeSizes = {
   md: '28rem',
   lg: '32rem',
   xl: '36rem',
+  '40': '40rem',
   '2xl': '42rem',
   '3xl': '48rem',
   '4xl': '56rem',

@@ -3,6 +3,8 @@ const colors = {
   current: 'currentColor',
   black: '#000',
   white: '#fff',
+  // primary: 'tomato',
+  primary: { 50: 'tomato', 100: 'red' },
 
   whiteAlpha: {
     50: 'rgba(255, 255, 255, 0.04)',
