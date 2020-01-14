@@ -21,6 +21,7 @@ import {
   Collapse,
 } from '@chakra-ui/core'
 import {
+  useColorMode,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -45,7 +46,7 @@ import {
   Checkbox,
 } from '@chakra-ui/core'
 
-import { Button, CSSReset } from '@chakra-ui/core'
+import { Button } from '@chakra-ui/core'
 import useSWR, { trigger } from 'swr'
 
 // const Page = styldd.div`
@@ -72,6 +73,20 @@ function ToastExample() {
     </Button>
   )
 }
+const DarkModeSwitch = () => {
+  const { colorMode, toggleColorMode } = useColorMode()
+  const isDark = colorMode === 'dark'
+  return (
+    <Switch
+      position="fixed"
+      top="1rem"
+      right="1rem"
+      color="green"
+      isChecked={isDark}
+      onChange={toggleColorMode}
+    />
+  )
+}
 
 export default function Index(props) {
   // const initialData = props.data
@@ -93,25 +108,32 @@ export default function Index(props) {
   console.log(errors)
 
   const [show, setShow] = React.useState(false)
+  const { colorMode } = useColorMode()
+  const bgColor = { light: 'gray.50', dark: 'gray.900' }
+
+  const color = { light: 'black', dark: 'white' }
 
   const handleToggle = () => setShow(!show)
   return (
-    <div
-      css={css`
-        max-width: 800px;
-        margin: 0 auto;
-        width: 90vw;
-      `}
-    >
-      <App />
-      <Header />
-      {router.query.title}
-      <CSSReset />
-      <Button variantColor="red">Button</Button>
-      {/* <Box color="primary.100">{data?.name}</Box> */}
-      {/* <Box color="tomato">{data?.name}</Box>
+    <Box minHeight="100vh" color={color[colorMode]} bg={bgColor[colorMode]}>
+      <Box
+        css={css`
+          max-width: 800px;
+          margin: 0 auto;
+          width: 90vw;
+        `}
+      >
+        {/* <DarkModeSwitch /> */}
+
+        <Box>hello world</Box>
+        <App />
+        <Header />
+        {router.query.title}
+        <Button variantColor="red">Button</Button>
+        {/* <Box color="primary.100">{data?.name}</Box> */}
+        {/* <Box color="tomato">{data?.name}</Box>
       <Button onClick={onOpen}>Open Modal</Button> */}
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
+        {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
@@ -126,7 +148,7 @@ export default function Index(props) {
           </ModalFooter>
         </ModalContent>
       </Modal> */}
-      {/* <Button variantColor="blue" onClick={handleToggle}>
+        {/* <Button variantColor="blue" onClick={handleToggle}>
         Toggle
       </Button>
       <Collapse mt={4} isOpen={show}>
@@ -134,37 +156,37 @@ export default function Index(props) {
         terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
         labore wes anderson cred nesciunt sapiente ea proident.
       </Collapse> */}
-      {/* <List spacing={2}>
+        {/* <List spacing={2}>
           <ListItem>Lorem ipsum dolor sit amet</ListItem>
           <ListItem>Consectetur adipiscing elit</ListItem>
           <ListItem>Integer molestie lorem at massa</ListItem>
           <ListItem>Facilisis in pretium nisl aliquet</ListItem>
         </List> */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={4}>
-          <FormControl isRequired isInvalid={errors.email}>
-            <FormLabel htmlFor="email">Email address</FormLabel>
-            <Input
-              ref={register({ required: true })}
-              name="email"
-              id="email"
-              aria-describedby="email-helper-text"
-            />
-            <FormErrorMessage>email is required</FormErrorMessage>
-          </FormControl>
-          <Select ref={register} name="option" placeholder="Select option">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-          </Select>
-          <FormControl isRequired isInvalid={errors.username}>
-            <Input name="username" ref={register} />
-          </FormControl>
-          <Input name="password" type="password" ref={register} />
-          <Button variantColor="blue" type="submit">
-            submit
-          </Button>
-          {/* <div
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={4}>
+            <FormControl isRequired isInvalid={errors.email}>
+              <FormLabel htmlFor="email">Email address</FormLabel>
+              <Input
+                ref={register({ required: true })}
+                name="email"
+                id="email"
+                aria-describedby="email-helper-text"
+              />
+              <FormErrorMessage>email is required</FormErrorMessage>
+            </FormControl>
+            <Select ref={register} name="option" placeholder="Select option">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </Select>
+            <FormControl isRequired isInvalid={errors.username}>
+              <Input name="username" ref={register} />
+            </FormControl>
+            <Input name="password" type="password" ref={register} />
+            <Button variantColor="blue" type="submit">
+              submit
+            </Button>
+            {/* <div
             onClick={() => alert('hello')}
             css={css`
               cursor: pointer;
@@ -172,8 +194,8 @@ export default function Index(props) {
           >
             submit
           </div> */}
-        </Stack>
-        {/* <RadioGroup>
+          </Stack>
+          {/* <RadioGroup>
           <Radio ref={register} j name="number" value="1">
             First
           </Radio>
@@ -184,26 +206,26 @@ export default function Index(props) {
             Third
           </Radio>
         </RadioGroup> */}
-        {/* <Checkbox defaultIsChecked name="check[0]" ref={register}>
+          {/* <Checkbox defaultIsChecked name="check[0]" ref={register}>
           a
         </Checkbox>
         <Checkbox name="check[1]" ref={register}>
           b
         </Checkbox> */}
-        {/* <Stack spacing={4}>
+          {/* <Stack spacing={4}>
           <Input placeholder="large size" size="lg" />
           <Input placeholder="default size" size="md" />
           <Input placeholder="small size" size="sm" />
         </Stack> */}
-        {/* <Flex justify="center" align="center">
+          {/* <Flex justify="center" align="center">
           <FormLabel htmlFor="email-alerts">Enable email alerts?</FormLabel>
           <Switch name="switch" ref={register} id="email-alerts" />
         </Flex> */}
-      </form>
-      {/* <Tooltip label="Welcome home" placement="bottom">
+        </form>
+        {/* <Tooltip label="Welcome home" placement="bottom">
         <Icon name="phone" />
       </Tooltip> */}
-      {/* <Stack spacing={3}>
+        {/* <Stack spacing={3}>
         <Text fontSize="6xl">In love with React & Next</Text>
         <Text fontSize="5xl">In love with React & Next</Text>
         <Text fontSize="4xl">In love with React & Next</Text>
@@ -215,12 +237,12 @@ export default function Index(props) {
         <Text fontSize="sm">In love with React & Next</Text>
         <Text fontSize="xs">In love with React & Next</Text>
       </Stack> */}
-      {/* <Stack isInline spacing={4}>
+        {/* <Stack isInline spacing={4}>
         <Box>hello</Box>
         <Box>world</Box>
       </Stack>
       <Spinner color="red.500" /> */}
-      {/* <ToastExample />
+        {/* <ToastExample />
       <Button isLoading variantColor="green">
         click me
       </Button>
@@ -240,7 +262,8 @@ export default function Index(props) {
       <Box color="primary" bg="red">
         cyan
       </Box> */}
-    </div>
+      </Box>
+    </Box>
   )
 }
 // Index.getInitialProps = async ctx => {
