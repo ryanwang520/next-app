@@ -74,17 +74,17 @@ function ToastExample() {
 }
 
 export default function Index(props) {
-  const initialData = props.data
-  console.log({ initialData })
-  const { data } = useSWR(
-    '/api',
-    async path => {
-      const res = await fetch(path)
-      return await res.json()
-    },
-    { initialData },
-  )
-  console.log({ data })
+  // const initialData = props.data
+  // console.log({ initialData })
+  // const { data } = useSWR(
+  //   '/api',
+  //   async path => {
+  //     const res = await fetch(path)
+  //     return await res.json()
+  //   },
+  //   { initialData },
+  // )
+  // console.log({ data })
 
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -108,7 +108,7 @@ export default function Index(props) {
       {router.query.title}
       <CSSReset />
       <Button variantColor="red">Button</Button>
-      <Box color="primary.100">{data?.name}</Box>
+      {/* <Box color="primary.100">{data?.name}</Box> */}
       {/* <Box color="tomato">{data?.name}</Box>
       <Button onClick={onOpen}>Open Modal</Button> */}
       {/* <Modal isOpen={isOpen} onClose={onClose}>
@@ -243,8 +243,8 @@ export default function Index(props) {
     </div>
   )
 }
-Index.getInitialProps = async ctx => {
-  const res = await fetch('http://localhost:3001/api')
-  const data = await res.json()
-  return { data }
-}
+// Index.getInitialProps = async ctx => {
+//   const res = await fetch('http://localhost:3001/api')
+//   const data = await res.json()
+//   return { data }
+// }
